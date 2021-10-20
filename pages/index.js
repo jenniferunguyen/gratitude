@@ -4,6 +4,8 @@ import History from '../components/History'
 import Input from '../components/Input'
 import {useState} from 'react'
 
+import { supabase } from '../utils/supabaseClient'
+
 export default function Home() {
   // [data value, updater function] = useState({default value of variable})
   const [user, setUser] = useState({
