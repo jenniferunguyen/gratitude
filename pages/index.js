@@ -2,26 +2,17 @@ import Head from 'next/head'
 import Greeting from '../components/Greeting'
 import History from '../components/History'
 import Input from '../components/Input'
+import GratitudeApp from '../components/GratitudeApp'
 import {useState} from 'react'
+import {Auth} from '@supabase/ui'
 
 import { supabase } from '../utils/supabaseClient'
 
 export default function Home() {
-  // [data value, updater function] = useState({default value of variable})
-  const [user, setUser] = useState({
-    "name": "Jennifer",
-    "email": "jenguyen@chapman.edu",
-  })
-
-  const [gratitudes, setGratitudes] = useState(['pumpkins','corn mazes','fall'])
-
-  const [hasSubmittedToday, setSubmittedToday] = useState(false)
-
-  const addGratitude = (entry) => {
-    let newGratitudes = [...gratitudes,entry]
-    setGratitudes(newGratitudes)
-    setSubmittedToday(true)
-  }
+  // gets the logged in user from Auth.UserContextProvider
+  // if no user is logged in, user will be null
+  // if a user is logged in, user will be an object with user info
+  const { user } = Auth.useUser()
 
   return (
     <div className="bg-gradient-to-t from-green-200 to-blue-200 min-h-screen min-w-screen"> 
@@ -31,29 +22,16 @@ export default function Home() {
       </Head>
 
       <main className="container mx-auto max-w-prose px-4 pt-12">
-          <Greeting 
-            user={user}
-            gratitudes={gratitudes}
-            hasSubmittedToday={hasSubmittedToday}
-          ></Greeting>
-          <div className="spacer" />
-          {
-            !hasSubmittedToday && <Input handleSubmit={addGratitude}/>
-          }
-          <div className="spacer" />
-          {
-            gratitudes.length > 0 &&
-            <History 
-              gratitudes={gratitudes}
-              hasSubmittedToday={hasSubmittedToday}
-            ></History>
-          }
-      </main>
-      <style jsx>{`
-        .spacer{
-          height: 20px;
+        {
+          // display app if user is loffed in, otherwise show login module
+          user ? (
+            <GratitudeApp user={user}/>
+          ) :
+            <div>
+              <Auth supabaseClient={supabase} socialLayout="horizontal" socialButtonSize="xlarge"/>
+            </div>
         }
-      `}</style>
+      </main>
 
     </div>
   )
