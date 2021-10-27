@@ -6,13 +6,13 @@ export default function History({gratitudes, hasSubmittedToday}){
                 hasSubmittedToday ? (
                     <p className="text-blue-800 text-2xl">Previously, you were grateful for 
                         <span className="font-bold">
-                            {gratitudes.slice(0, -1).map(g => ' '+g).toString()} 
+                            {gratitudes.slice(0, -1).map(g => ' '+g.entry).toString()} 
                         </span>
                     </p>
                 ) : (
                     <p className="text-blue-800 text-2xl">Previously, you were grateful for 
                         <span className="font-bold">
-                            {gratitudes.map(g => ' '+g).toString()} 
+                            {gratitudes.map(g => ' '+g.entry).toString()} 
                         </span>
                     </p>
                 )

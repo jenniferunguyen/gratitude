@@ -1,7 +1,7 @@
 import Greeting from './Greeting'
 import History from './History'
 import Input from './Input'
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 
 import { supabase } from '../utils/supabaseClient'
 
@@ -9,14 +9,43 @@ export default function GratitudeApp({ user }) {
   
   // [data value, updater function] = useState({default value of variable})
 
-  const [gratitudes, setGratitudes] = useState(['pumpkins','corn mazes','fall'])
+  const [gratitudes, setGratitudes] = useState([])
 
   const [hasSubmittedToday, setSubmittedToday] = useState(false)
 
-  const addGratitude = (entry) => {
-    let newGratitudes = [...gratitudes,entry]
-    setGratitudes(newGratitudes)
-    setSubmittedToday(true)
+  // function, array of dependencies
+  useEffect(() => {
+    // run the fetchGratitudes() function
+    // after the intitial render of the app
+    // so we have access to the logged in user
+    fetchGratitudes()
+  }, [])
+
+  const fetchGratitudes = async () => {
+    // get the gratitudes data from supabase
+    // set the value of gratitudes state to that data
+    let { data: gratitudes, error } = await supabase
+      .from('gratitudes')
+      .select('entry, date_insert_ts')
+
+    if(!error) {
+      setGratitudes(gratitudes)
+    } else {
+      console.log(error)
+    }
+  }
+
+  const addGratitude = async (entry) => {
+    const { data, error } = await supabase
+      .from('gratitudes')
+      .insert([
+      { id: user.id, entry: entry },
+    ])
+    if(error) {console.log(error)}
+    else {
+      setGratitudes([...gratitudes, {'entry': entry, 'date_insert_ts': null }])
+    }
+
   }
 
   return (
