@@ -25,7 +25,14 @@ export default function Home() {
         {
           // display app if user is loffed in, otherwise show login module
           user ? (
-            <GratitudeApp user={user}/>
+            <div>
+              <GratitudeApp user={user}/>
+              <button onClick={async () => {
+                let { error } = await supabase.auth.signOut()
+                if(error) {console.log(error)}
+              }}
+              className="text-yellow-400">Logout</button>
+            </div>
           ) :
             <div>
               <Auth supabaseClient={supabase} socialLayout="horizontal" socialButtonSize="xlarge"/>
