@@ -34,6 +34,7 @@ export default function GratitudeApp({ user }) {
       let mostRecentRecordTime = new Date(gratitudes.slice(-1)[0].date_insert_ts).getTime()
       let hoursSinceLastSubmission = (mostRecentRecordTime - currentTime)/3600000
       let didSubmitToday = (hoursSinceLastSubmission < 24)
+
       setGratitudes(gratitudes)
       setLoading(false)
       setSubmittedToday(didSubmitToday)
@@ -65,17 +66,17 @@ export default function GratitudeApp({ user }) {
 
   /* Application is still fetching data */
   if (loading) {
-    return <p>Loading...</p>
+    return <p className="text-blue-800">Loading...</p>
   }
 
   /* Something went wrong while fetching data*/
   if (error) {
-    return <p>{error}</p>
+    return <p className="text-blue-800">{error}</p>
   }
 
   /* Everything went as expected, show full app*/
   return (
-    <div className="bg-gradient-to-t from-green-200 to-blue-200 min-w-screen"> 
+    <div> 
 
       <main className="container mx-auto max-w-prose px-4 pt-12">
           <Greeting 

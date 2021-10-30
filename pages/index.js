@@ -39,7 +39,13 @@ export default function Home() {
             </div>
         }
       </main>
-
+      <style jsx>{`
+        button{
+          margin: 1em;
+          margin-top: 2em;
+          font-weight: 500;
+        }
+      `}</style>
     </div>
   )
 }
